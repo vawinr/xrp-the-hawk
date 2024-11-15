@@ -4,12 +4,17 @@
 
 package frc.robot;
 
+import java.util.Random;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
+import frc.robot.commands.DriveDistance;
+import frc.robot.commands.DriveTime;
+import frc.robot.commands.TurnDegrees;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -27,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
+@SuppressWarnings("unused")
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
@@ -44,6 +50,10 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
   }
+
+  public Command autonomousDistanceCommand() {
+    return autonomousDistanceCommand();
+}
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -75,6 +85,7 @@ public class RobotContainer {
     // Setup SmartDashboard options
     m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(m_drivetrain));
     m_chooser.addOption("Auto Routine Time", new AutonomousTime(m_drivetrain));
+    m_chooser.addOption("Quarry", new DriveTime(-1, 3, m_drivetrain));
     SmartDashboard.putData(m_chooser);
   }
 
@@ -85,7 +96,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
-  }
+   }
+  
+
 
   /**
    * Use this to pass the teleop command to the main {@link Robot} class.
@@ -94,6 +107,6 @@ public class RobotContainer {
    */
   public Command getArcadeDriveCommand() {
     return new ArcadeDrive(
-        m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(0));
+        m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(4));
   }
 }
